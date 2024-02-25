@@ -153,22 +153,23 @@ function captureUtilityEvents() {
     enforceMinMax(dimensionInput);
     plusBtn.addEventListener("click", (event) => {
         // canvas.innerHTML = "";
-        if (event.shiftKey) dimensionInput.value = Number(dimensionInput.value) + 10;
-        else dimensionInput.value = Number(dimensionInput.value) + 1;
+        if (event.shiftKey && Number(dimensionInput.value) + 10 <= 99)
+            dimensionInput.value = Number(dimensionInput.value) + 10;
+        else if (Number(dimensionInput.value) + 1 <= 99)
+            dimensionInput.value = Number(dimensionInput.value) + 1;
+        else
+            dimensionInput.value = 99;
         start();
         // generateBoard(dimensionInput.textContent);
     })
 
     minusBtn.addEventListener("click", (event) => {
-        if (event.shiftKey && Number(dimensionInput.value) - 10 >= 4) {
+        if (event.shiftKey && Number(dimensionInput.value) - 10 >= 4)
             dimensionInput.value = Number(dimensionInput.value) - 10;
-        }
-        else if (Number(dimensionInput.value) - 1 >= 4) {
+        else if (Number(dimensionInput.value) - 1 >= 4)
             dimensionInput.value = Number(dimensionInput.value) - 1;
-        }
-        else {
+        else
             dimensionInput.value = 4;
-        }
         // generateBoard(dimensionInput.textContent);
         start();
     })
