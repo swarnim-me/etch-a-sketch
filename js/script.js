@@ -5,9 +5,12 @@ const defaultColorPalette = document.querySelector(".default-colors");
 const colorPicker = document.querySelector("input[type='color']");
 const colorSelectorBtn = document.querySelector(".color-picker");
 const customColorsBtn = document.querySelector(".custom-colors-btn")
-
+const plusBtn = document.querySelector(".plus");
+const minusBtn = document.querySelector(".minus");
+const dimensionInput = document.querySelector(".dimension");
+const toggleGrid = document.querySelector(".toggle-grid");
 let isSelectingColor = false;
-const DIMENSION = 21;
+const DIMENSION = dimensionInput.value;
 
 let pixels;
 let currentColor = "black";
@@ -31,6 +34,7 @@ function generateBoard(dimension) {
 }
 
 function generateDefaultColors() {
+    defaultColorPalette.innerHTML = "";
     let colorIndex = 0;
     for (let i = 0; i < 2; i++) {
         const colorRow = document.createElement("div");
@@ -108,7 +112,24 @@ function captureEvents() {
 
 }
 
+function enforceMinMax(el) {
+    if (el.value != "") {
+        if (parseInt(el.value) < parseInt(el.min)) {
+            el.value = el.min;
+        }
+        if (parseInt(el.value) > parseInt(el.max)) {
+            el.value = el.max;
+        }
+    }
+}
+
 function captureUtilityEvents() {
+    toggleGrid.addEventListener("click", () => {
+        Array.from(pixels).forEach(pixel => {
+            pixel.classList.toggle("grid");
+        })
+    })
+
     clearBtn.addEventListener("click", () => {
         repaintCanvas("white");
     })
@@ -129,12 +150,46 @@ function captureUtilityEvents() {
         document.body.style.cursor = "crosshair";
         isSelectingColor = true;
     })
+    enforceMinMax(dimensionInput);
+    plusBtn.addEventListener("click", (event) => {
+        // canvas.innerHTML = "";
+        if (event.shiftKey) dimensionInput.value = Number(dimensionInput.value) + 10;
+        else dimensionInput.value = Number(dimensionInput.value) + 1;
+        start();
+        // generateBoard(dimensionInput.textContent);
+    })
+
+    minusBtn.addEventListener("click", (event) => {
+        if (event.shiftKey && Number(dimensionInput.value) - 10 >= 4) {
+            dimensionInput.value = Number(dimensionInput.value) - 10;
+        }
+        else if (Number(dimensionInput.value) - 1 >= 4) {
+            dimensionInput.value = Number(dimensionInput.value) - 1;
+        }
+        else {
+            dimensionInput.value = 4;
+        }
+        // generateBoard(dimensionInput.textContent);
+        start();
+    })
+
+    dimensionInput.addEventListener("keydown", (event) => {
+        console.log(event);
+        if (event.key == 'Enter') {
+            dimensionInput.blur();
+            if (dimensionInput.value < 4) dimensionInput.value = 4;
+            start();
+        }
+    })
 }
 
+function start() {
+    canvas.innerHTML = "";
+    generateBoard(dimensionInput.value);
+    generateDefaultColors();
+    getAllPixels();
+    captureEvents();
+}
 
-
-generateBoard(DIMENSION);
-generateDefaultColors();
-getAllPixels();
-captureEvents();
 captureUtilityEvents();
+start();

@@ -19,6 +19,10 @@ body {
     background: #EFEFEF;
 }
 
+.grid {
+    border: .1px solid rgba(0, 0, 0, 0.147);
+}
+
 main {
     width: 100%;
     display: flex;
@@ -45,6 +49,7 @@ main {
 }
 
 .hidden {
+    height: 0;
     opacity: 0;
 }
 
@@ -54,6 +59,7 @@ main {
     flex-direction: column;
     align-items: stretch;
     justify-content: center;
+    gap: 10px;
 }
 
 .color-row {
@@ -133,4 +139,20 @@ button {
 .dimension-wrapper>div {
     background: white;
     border-radius: 8px;
+}
+
+.dimension {
+    border: 0;
+    font-size: 18px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
 }

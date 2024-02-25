@@ -33,14 +33,15 @@
 
             </div>
             <div class="utility">
+                <button class="toggle-grid">Toggle Grid</button>
                 <button class="eraser">Eraser</button>
                 <button class="clear">Clear</button>
                 <div class="dimension-wrapper">
-                    <button class="plus">-</button>
-                    <div>16</div>
-                    <button class="minus">+</button>
+                    <button class="minus">-</button>
+                    <!-- <input class="dimension" type="number" value="16" max="99" min="2"> -->
+                    <input type="text" pattern="\d*" maxlength="2" minlength="1" class="dimension" value="16">
+                    <button class="plus">+</button>
                 </div>
-                <button class="export">Export as PNG</button>
             </div>
         </div>
     </main>
