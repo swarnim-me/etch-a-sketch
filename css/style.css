@@ -40,8 +40,12 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 60%;
+    width: 1200px;
     gap: 20px;
+}
+
+.hidden {
+    opacity: 0;
 }
 
 .colors {
@@ -50,6 +54,35 @@ main {
     flex-direction: column;
     align-items: stretch;
     justify-content: center;
+}
+
+.color-row {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.default-colors {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.color-select {
+    height: 50px;
+    width: 50px;
+    border-radius: 8px;
+}
+
+.rainbow {
+    background: linear-gradient(45deg, #ff5151 0%,
+            #ff9a51 21%,
+            #f8fb6a 42%,
+            #86e67e 61%,
+            #31c6ed 83%,
+            #9714ff 100%);
 }
 
 
