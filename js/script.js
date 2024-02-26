@@ -78,14 +78,15 @@ function generateUserColors() {
             const colorDiv = document.createElement("div");
             colorDiv.classList.add("color-select");
             colorDiv.classList.add("user-color");
-            colorDiv.style.backgroundColor = "white";
+            colorDiv.style.background = "none"
+            colorDiv.style.border = "#262626 4px solid"
             colorDiv.addEventListener("click", (event) => {
-                if (event.shiftKey) colorDiv.style.backgroundColor = "white";
-                else if (colorDiv.style.backgroundColor === "white") {
+                if (event.shiftKey) colorDiv.style.background = "none";
+                else if (colorDiv.style.background === "none") {
                     colorDiv.style.backgroundColor = currentColor;
                 }
                 else {
-                    currentColor = colorDiv.style.backgroundColor;
+                    currentColor = colorDiv.style.background;
                 }
             })
             colorRow.appendChild(colorDiv);

@@ -6,7 +6,10 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    font-family: 'Roboto Mono'
+    font-family: 'Roboto Mono';
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 body {
