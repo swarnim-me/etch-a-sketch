@@ -34,6 +34,7 @@ function generateBoard(dimension) {
             pixel.style.width = canvas.offsetWidth / dimension + "px";
             // pixel.style.background = "red";
             pixel.classList.add("pixel");
+            pixel.classList.add("grid");
             gridRow.appendChild(pixel);
         }
         canvas.appendChild(gridRow);
@@ -41,7 +42,7 @@ function generateBoard(dimension) {
 }
 
 function generateDefaultColors() {
-    defaultColorPalette.innerHTML = "";
+    if (defaultColorPalette.children.length != 0) return;
     let colorIndex = 0;
     for (let i = 0; i < 2; i++) {
         const colorRow = document.createElement("div");
@@ -201,7 +202,7 @@ function captureUtilityEvents() {
             dimensionInput.value = Number(dimensionInput.value) + 1;
         else
             dimensionInput.value = 99;
-        start();
+        restart();
         // generateBoard(dimensionInput.textContent);
     })
 
@@ -213,7 +214,7 @@ function captureUtilityEvents() {
         else
             dimensionInput.value = 4;
         // generateBoard(dimensionInput.textContent);
-        start();
+        restart();
     })
 
     dimensionInput.addEventListener("keydown", (event) => {
@@ -221,7 +222,7 @@ function captureUtilityEvents() {
         if (event.key == 'Enter') {
             dimensionInput.blur();
             if (dimensionInput.value < 4) dimensionInput.value = 4;
-            start();
+            restart();
         }
     })
 }
@@ -233,8 +234,14 @@ function start() {
     generateUserColors();
     getAllPixels();
     captureEvents();
+    captureUtilityEvents();
 }
 
-// Don't need to repeat this, it causes weird bugs
-captureUtilityEvents();
+function restart() {
+    canvas.innerHTML = "";
+    generateBoard(dimensionInput.value);
+    getAllPixels();
+    captureEvents();
+}
+
 start();
