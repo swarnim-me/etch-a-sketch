@@ -95,7 +95,7 @@ main {
 .canvas {
     width: 480px;
     height: 480px;
-    background: white;
+    /* background: white; */
     flex-shrink: 0;
     flex-basis: auto;
     display: flex;

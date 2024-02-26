@@ -22,7 +22,7 @@ const DIMENSION = dimensionInput.value;
 const USER_COLORS_COUNT = 8;
 let pixels;
 
-const defaultColors = ["#333333", "#ff9a51", "#f8fb6a", "#86e67e", "#31c6ed", "#FF51E3", "#9714ff", "rainbow"];
+const defaultColors = ["#121212", "#ffffff", "#f8fb6a", "#86e67e", "#31c6ed", "#fc035e", "#9714ff", "rainbow"];
 
 let currentColor = defaultColors[0];
 function generateBoard(dimension) {
@@ -97,7 +97,7 @@ function generateUserColors() {
 
 function repaintCanvas(pixelColor) {
     Array.from(pixels).forEach(pixel => {
-        pixel.style.backgroundColor = pixelColor;
+        pixel.style.background = pixelColor;
     })
 }
 
@@ -113,12 +113,12 @@ function colorPixel(pixel) {
 
             // Adding this logic, so the colors don't flicker in one pixel
             if (lastPixel != pixel.target) {
-                pixel.target.style.backgroundColor = defaultColors[randomIndex];
+                pixel.target.style.background = defaultColors[randomIndex];
                 lastPixel = pixel.target;
             }
         }
         else {
-            pixel.target.style.backgroundColor = currentColor;
+            pixel.target.style.background = currentColor;
         }
     }
 }
@@ -171,13 +171,13 @@ function captureUtilityEvents() {
     })
 
     clearBtn.addEventListener("click", () => {
-        repaintCanvas("white");
+        repaintCanvas("none");
     })
 
     exportBtn.addEventListener("click", exportCanvas);
 
     eraserBtn.addEventListener("click", () => {
-        currentColor = "white";
+        currentColor = "none";
     })
 
     colorPicker.addEventListener("change", () => {
@@ -231,7 +231,7 @@ function captureUtilityEvents() {
 }
 
 function exportCanvas() {
-    html2canvas(canvas).then(function (canvas) {
+    html2canvas(canvas, { backgroundColor: null }).then(function (canvas) {
         var dataURL = canvas.toDataURL();
         var link = document.createElement('a');
         link.href = dataURL;
