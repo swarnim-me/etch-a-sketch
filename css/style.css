@@ -156,3 +156,11 @@ input::-webkit-inner-spin-button {
 input[type=number] {
     -moz-appearance: textfield;
 }
+
+small {
+    color: gray;
+    font-family: sans-serif;
+    line-height: 22px;
+    font-weight: lighter;
+    text-align: center;
+}

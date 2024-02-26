@@ -2,6 +2,7 @@ const canvas = document.querySelector(".canvas");
 const clearBtn = document.querySelector(".clear");
 const eraserBtn = document.querySelector(".eraser");
 const defaultColorPalette = document.querySelector(".default-colors");
+const userColorPalette = document.querySelector(".user-colors");
 const colorPicker = document.querySelector("input[type='color']");
 const colorSelectorBtn = document.querySelector(".color-picker");
 const customColorsBtn = document.querySelector(".custom-colors-btn")
@@ -9,14 +10,20 @@ const plusBtn = document.querySelector(".plus");
 const minusBtn = document.querySelector(".minus");
 const dimensionInput = document.querySelector(".dimension");
 const toggleGrid = document.querySelector(".toggle-grid");
-let isSelectingColor = false;
+const fillCanvasBtn = document.querySelector(".fill-canvas");
+let modes = {
+    normalMode: 1,
+    fillMode: 2,
+    selectMode: 3
+}
+let mode = modes.normalMode;
 const DIMENSION = dimensionInput.value;
-
+const USER_COLORS_COUNT = 8;
 let pixels;
-let currentColor = "black";
 
 const defaultColors = ["#333333", "#ff9a51", "#f8fb6a", "#86e67e", "#31c6ed", "#FF51E3", "#9714ff", "rainbow"];
 
+let currentColor = defaultColors[0];
 function generateBoard(dimension) {
     for (let i = 0; i < dimension; i++) {
         const gridRow = document.createElement("div");
@@ -60,6 +67,31 @@ function generateDefaultColors() {
     }
 }
 
+function generateUserColors() {
+    if (userColorPalette.children.length != 0) return;
+    for (let i = 0; i < 2; i++) {
+        const colorRow = document.createElement("div");
+        colorRow.classList.add("color-row");
+        for (let j = 0; j < 4; j++) {
+            const colorDiv = document.createElement("div");
+            colorDiv.classList.add("color-select");
+            colorDiv.classList.add("user-color");
+            colorDiv.style.backgroundColor = "white";
+            colorDiv.addEventListener("click", (event) => {
+                if (event.shiftKey) colorDiv.style.backgroundColor = "white";
+                else if (colorDiv.style.backgroundColor === "white") {
+                    colorDiv.style.backgroundColor = currentColor;
+                }
+                else {
+                    currentColor = colorDiv.style.backgroundColor;
+                }
+            })
+            colorRow.appendChild(colorDiv);
+        }
+        userColorPalette.appendChild(colorRow);
+    }
+}
+
 
 function repaintCanvas(pixelColor) {
     Array.from(pixels).forEach(pixel => {
@@ -73,17 +105,19 @@ function getAllPixels() {
 
 let lastPixel;
 function colorPixel(pixel) {
-    if (currentColor === "rainbow") {
-        const randomIndex = Math.floor(Math.random() * defaultColors.length);
+    if (mode === modes.normalMode) {
+        if (currentColor === "rainbow") {
+            const randomIndex = Math.floor(Math.random() * defaultColors.length);
 
-        // Adding this logic, so the colors don't flicker in one pixel
-        if (lastPixel != pixel.target) {
-            pixel.target.style.backgroundColor = defaultColors[randomIndex];
-            lastPixel = pixel.target;
+            // Adding this logic, so the colors don't flicker in one pixel
+            if (lastPixel != pixel.target) {
+                pixel.target.style.backgroundColor = defaultColors[randomIndex];
+                lastPixel = pixel.target;
+            }
         }
-    }
-    else {
-        pixel.target.style.backgroundColor = currentColor;
+        else {
+            pixel.target.style.backgroundColor = currentColor;
+        }
     }
 }
 
@@ -102,14 +136,18 @@ function captureEvents() {
 
     Array.from(pixels).forEach(pixel => {
         pixel.addEventListener("click", () => {
-            if (isSelectingColor) {
+            if (mode == modes.selectMode) {
                 currentColor = pixel.style.backgroundColor;
-                isSelectingColor = false;
+                mode = modes.normalMode;
+                document.body.style.cursor = "auto";
+            }
+            else if (mode == modes.fillMode) {
+                repaintCanvas(currentColor);
+                mode = modes.normalMode;
                 document.body.style.cursor = "auto";
             }
         })
     })
-
 }
 
 function enforceMinMax(el) {
@@ -148,7 +186,11 @@ function captureUtilityEvents() {
 
     colorSelectorBtn.addEventListener("click", () => {
         document.body.style.cursor = "crosshair";
-        isSelectingColor = true;
+        mode = modes.selectMode;
+    })
+    fillCanvasBtn.addEventListener("click", () => {
+        document.body.style.cursor = "copy";
+        mode = modes.fillMode;
     })
     enforceMinMax(dimensionInput);
     plusBtn.addEventListener("click", (event) => {
@@ -188,9 +230,11 @@ function start() {
     canvas.innerHTML = "";
     generateBoard(dimensionInput.value);
     generateDefaultColors();
+    generateUserColors();
     getAllPixels();
     captureEvents();
 }
 
+// Don't need to repeat this, it causes weird bugs
 captureUtilityEvents();
 start();
