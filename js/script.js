@@ -1,5 +1,6 @@
 const canvas = document.querySelector(".canvas");
 const clearBtn = document.querySelector(".clear");
+const exportBtn = document.querySelector(".export");
 const eraserBtn = document.querySelector(".eraser");
 const defaultColorPalette = document.querySelector(".default-colors");
 const userColorPalette = document.querySelector(".user-colors");
@@ -173,6 +174,8 @@ function captureUtilityEvents() {
         repaintCanvas("white");
     })
 
+    exportBtn.addEventListener("click", exportCanvas);
+
     eraserBtn.addEventListener("click", () => {
         currentColor = "white";
     })
@@ -225,6 +228,16 @@ function captureUtilityEvents() {
             restart();
         }
     })
+}
+
+function exportCanvas() {
+    html2canvas(canvas).then(function (canvas) {
+        var dataURL = canvas.toDataURL();
+        var link = document.createElement('a');
+        link.href = dataURL;
+        link.download = 'export.png';
+        link.click();
+    });
 }
 
 function start() {
